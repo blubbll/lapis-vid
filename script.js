@@ -10,7 +10,9 @@ const demoMedia = {
 $("video").src = demoMedia.video;
 $("audio").src = demoMedia.audio;
 
-$("video").play();
+try {
+  $("video").play();
+} catch (e) {}
 {
   //sync video playNpause with audio
   $("audio").addEventListener("play", () => {
@@ -21,27 +23,20 @@ $("video").play();
     });
   //sync audio playNpause with video
   $("video").addEventListener("play", () => {
-    $("i.fa-play-circle").style.visibility = "hidden";
-
     $("audio").currentTime = $("video").currentTime;
     $("audio").play();
   }),
     $("video").addEventListener("pause", () => {
-      $("i.fa-play-circle").style.visibility = "visible";
-      $("i.fa-pause-circle").style.visibility = "hidden";
-
       $("audio").pause();
     });
-
-  //click button
-  $("i.fa-play-circle").addEventListener("click", () => {
-    $("video").play();
-  });
-
-  $("i.fa-pause-circle").addEventListener("click", () => {
-    $("video").pause();
-  });
 }
 const syncer = setInterval(() => {
-  $("audio").currentTime = $("video").currentTime;
+  $("audio").currentTime / $("video").currentTime > 1.01 && [
+    ($("video").currentTime = $("audio").currentTime)
+  ];
 }, 2999);
+
+$("input").addEventListener("change", e => {
+  const that = e.target;
+  $("audio").volume = that.value / 100;
+});
