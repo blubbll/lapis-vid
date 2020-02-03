@@ -4,7 +4,6 @@ audio {
 
 lapis-player {
   display: flex;
-  /*height: 50%;*/
   max-height: 50%;
   width: 100%;
 }
@@ -22,6 +21,7 @@ input[type="range"]:hover {
 /*https://codepen.io/BainjaminLafalize/pen/GiJwn*/
 /*https://codepen.io/Varo/pen/vLdvMK*/
 
+video,
 #mep_0 {
   height: inherit;
   position: absolute;

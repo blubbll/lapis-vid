@@ -1,94 +1,148 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
-const { afterglow } = window;
-
-const demoMedia = {
-  audio:
-    "https://cdn.glitch.com/07d3d128-e4a3-48ea-9d14-fc3b0a9c1b78%2Faudio.m4a?v=1580661398525",
-  video:
-    "https://cdn.glitch.com/07d3d128-e4a3-48ea-9d14-fc3b0a9c1b78%2Fvideo.mp4?v=1580661554465"
-};
-$("video").src = demoMedia.video;
-$("audio").src = demoMedia.audio;
-
-$("video").addEventListener(
-  "loadedmetadata",
-  e => {
-    const fitRatio = () => {
-      const that = e.target;
-      // ($("#mep_0").style.width = `${that.videoWidth}px`),
-      // ($("#mep_0").style.height = `${that.videoHeight}px`);
-
-      const ratio =
-        that.getAttribute("ratio") || that.videoHeight / that.videoWidth;
-      that.setAttribute("ratio", ratio);
-      $("#mep_0").style.height = `${$("#mep_0").clientWidth * ratio}px`;
-    };
-    setTimeout(fitRatio, 0);
-    window.addEventListener("resize", fitRatio);
-  },
-  false
-);
-
-afterglow.initVideoElements();
-
-try {
-  $("video").load();
-  //$("video").play();
-} catch (e) {}
 {
-  //sync video playNpause with audio
-  $("audio").addEventListener("play", () => {
-    $("video").play();
-  }),
-    $("audio").addEventListener("pause", () => {
-      $("video").pause();
-    });
-  //sync audio playNpause with video
-  $("video").addEventListener("play", () => {
-    $("video").currentTime = $("audio").currentTime;
-    $("audio").play();
-  }),
-    $("video").addEventListener("pause", () => {
-      (window.self !== window.top || document.hasFocus()) && $("audio").pause();
-    });
-}
+  const { afterglow, ObservableSlim } = window;
 
-/*window.addEventListener("focus", e => {
-  $("video").play();
-});*/
+  const demoMedia = {
+    audio:
+      "https://cdn.glitch.com/07d3d128-e4a3-48ea-9d14-fc3b0a9c1b78%2Faudio.m4a?v=1580661398525",
+    video:
+      "https://cdn.glitch.com/07d3d128-e4a3-48ea-9d14-fc3b0a9c1b78%2Fvideo.mp4?v=1580661554465",
+    video_low:
+      "https://cdn.glitch.com/07d3d128-e4a3-48ea-9d14-fc3b0a9c1b78%2Fvideo_low.mp4?v=1580727568643"
+  };
 
-window.addEventListener("blur", function() {
-  console.log("blur");
-});
+  //CHROME
+  if (!!window.chrome) {
+    $("video").outerHTML =
+      '<video id="video" muted preload="metadata" class="afterglow" height="0" width="0"></video>';
 
-const syncer = setInterval(() => {
-  $("audio").currentTime / $("video").currentTime > 1.1 && [
-    ($("video").currentTime = $("audio").currentTime)
-  ];
-}, 2999);
+    //SET MEDIA
+    ($("video").src = demoMedia.video), ($("audio").src = demoMedia.audio);
 
-//RESET EVENT
+    //init afterglow
+    afterglow.initVideoElements();
 
-$(".afterglow__top-control-bar").innerHTML = $(
-  ".afterglow__top-control-bar"
-).innerHTML;
-//ADD NEW EVENT
-$(".afterglow__button.afterglow__fullscreen-toggle").addEventListener(
-  "click",
-  e => {
-    const that = e.target;
+    $("video").load();
 
-    if (/*$("body").clientWidth < 555 && */ !!window.chrome);
     {
-      if (document.fullscreen) {
-        Fullscreen.exit();
-        $("#mep_0").classList.add("afterglow__container");
-      } else {
-        $("#mep_0").classList.remove("afterglow__container");
-        Fullscreen.enter($("video"));
-      }
+      const VIDEO = $("video");
+      const AUDIO = $("audio");
+      //MIRROR VOLUME
+      Object.defineProperty(VIDEO, "volume", {
+        set: val => {
+          this._volume = val;
+          AUDIO._volume = val;
+        },
+        get: () => {
+          return VIDEO._volume;
+        }
+      });
+
+      //MIRROR MUTED
+      Object.defineProperty(VIDEO, "muted", {
+        set: val => {
+          VIDEO._muted = val;
+          AUDIO.muted = val;
+        },
+        get: () => {
+          return VIDEO._muted;
+        }
+      });
+
+      //SYNC PLAY
+      VIDEO._play = VIDEO.play;
+      Object.defineProperty(VIDEO, "play", {
+        get: () => {
+          AUDIO.play();
+          return VIDEO._play;
+        }
+      });
+      //SYNC PAUSE
+      VIDEO._pause = VIDEO.pause;
+      Object.defineProperty(VIDEO, "pause", {
+        get: () => {
+          AUDIO.pause();
+          return VIDEO._pause;
+        }
+      });
     }
+
+    $("video").addEventListener(
+      "loadedmetadata",
+      e => {
+        try {
+          $("video").play();
+        } catch (e) {
+          console.warn(e);
+        }
+        const fitRatio = () => {
+          const that = e.target;
+
+          const ratio =
+            $("lapis-player").getAttribute("ratio") ||
+            that.videoHeight / that.videoWidth;
+          $("lapis-player").setAttribute("ratio", ratio);
+          $("#mep_0").style.height = `${$("#mep_0").clientWidth * ratio}px`;
+        };
+        setTimeout(fitRatio, 0);
+        window.addEventListener("resize", fitRatio);
+      },
+      false
+    );
+
+    try {
+      //$("video").play();
+    } catch (e) {}
+    {
+      //sync video playNpause with audio
+      $("audio").addEventListener("play", () => {
+        $("video").paused && $("video").play();
+      }),
+        $("audio").addEventListener("pause", () => {
+          !$("video").paused && $("video").pause();
+        });
+    }
+
+    const syncer = setInterval(() => {
+      $("audio").currentTime / $("video").currentTime > 1.1 && [
+        ($("video").currentTime = $("audio").currentTime)
+      ];
+    }, 2999);
+
+    //RESET EVENT
+
+    $(".afterglow__top-control-bar").innerHTML = $(
+      ".afterglow__top-control-bar"
+    ).innerHTML;
+    //ADD NEW EVENT
+    $(".afterglow__button.afterglow__fullscreen-toggle").addEventListener(
+      "click",
+      e => {
+        const that = e.target;
+
+        //MOBILE DEVICE
+        if (typeof window.orientation !== "undefined");
+        {
+          if (document.fullscreen) {
+            Fullscreen.exit();
+            $("#mep_0").classList.add("afterglow__container");
+          } else {
+            $("#mep_0").classList.remove("afterglow__container");
+            Fullscreen.enter($("video"));
+          }
+        }
+      }
+    );
+
+    //IOS
+  } else if (
+    !!navigator.platform &&
+    /iPad|iPhone|iPod/.test(navigator.platform)
+  ) {
+    $("video").src = demoMedia.video_low;
   }
-);
+
+  $("video").src = demoMedia.video_low;
+}
