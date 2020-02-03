@@ -15,11 +15,15 @@ $("audio").src = demoMedia.audio;
 $("video").addEventListener(
   "loadedmetadata",
   e => {
-    const that = e.target;
-    // ($("#mep_0").style.width = `${that.videoWidth}px`),
-    // ($("#mep_0").style.height = `${that.videoHeight}px`);
-    const ratio = that.videoHeight / that.videoWidth;
-    $("#mep_0").style.height = `${$("#mep_0").clientWidth * ratio}px`;
+    const fitRatio = () => {
+      const that = e.target;
+      // ($("#mep_0").style.width = `${that.videoWidth}px`),
+      // ($("#mep_0").style.height = `${that.videoHeight}px`);
+      const ratio = that.videoHeight / that.videoWidth;
+      $("#mep_0").style.height = `${$("#mep_0").clientWidth * ratio}px`;
+    };
+    setTimeout(fitRatio, 0);
+    window.addEventListener("resize", fitRatio);
   },
   false
 );
@@ -27,6 +31,7 @@ $("video").addEventListener(
 afterglow.initVideoElements();
 
 try {
+  $("video").load();
   //$("video").play();
 } catch (e) {}
 {
@@ -67,6 +72,11 @@ $(".afterglow__button.afterglow__fullscreen-toggle").addEventListener(
   "click",
   e => {
     const that = e.target;
-    !that.isFullscreen() ? Fullscreen.open($("#mep_0")) : Fullscreen.exit();
+   
+    
+    
+      !that.isFullscreen() ? Fullscreen.open($("#mep_0")) : Fullscreen.exit();
+    
+ 
   }
 );

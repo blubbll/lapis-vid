@@ -5,7 +5,8 @@ audio {
 
 lapis-player {
   display: flex;
-  height: 50%;
+  /*height: 50%;*/
+  max-height: 50%;
   width: 100%;
 }
 
@@ -26,4 +27,5 @@ input[type="range"]:hover {
     height: inherit;
     position: absolute;
     width: inherit;
+    max-height: inherit;
 }
