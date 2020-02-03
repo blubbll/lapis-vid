@@ -54,3 +54,43 @@ HTMLElement.prototype.removeListeners = () => {
     delete this.myListeners;
   }
 };
+
+{
+  let that = {};
+  // Opera 8.0+
+  that.isOpera =
+    (!!window.opr && !!window.opr.addons) ||
+    !!window.opera ||
+    navigator.userAgent.indexOf(" OPR/") >= 0;
+
+  // Firefox 1.0+
+  that.isFirefox = typeof InstallTrigger !== "undefined";
+
+  // Safari 3.0+ "[object HTMLElementConstructor]"
+  that.isSafari =
+    /constructor/i.test(window.HTMLElement) ||
+    (function(p) {
+      return p.toString() === "[object SafariRemoteNotification]";
+    })(
+      !window["safari"] ||
+        (typeof safari !== "undefined" && window.safari.pushNotification)
+    );
+
+  // Internet Explorer 6-11
+  that.isIE = /*@cc_on!@*/ false || !!document.documentMode;
+
+  // Edge 20+
+  that.isEdge = !that.isIE && !!window.StyleMedia;
+
+  // Chrome 1 - 71
+  that.isChrome =
+    !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+
+  // Edge (based on chromium) detection
+  that.isEdgeChromium =
+    that.isChrome && navigator.userAgent.indexOf("Edg") != -1;
+
+  // Blink engine detection
+  that.isBlink = (that.isChrome || that.isOpera) && !!window.CSS;
+  window.getBrowser = () => that;
+}
