@@ -81,7 +81,14 @@ const $$ = document.querySelectorAll.bind(document);
             console.warn(e);
           }
 
-          $(".afterglow__controls").insertAdjacentHTML('beforeend',
+          //fancy title
+          $(".afterglow__controls").insertAdjacentHTML(
+            "afterbegin",
+            `<div class="afterglow__title-bar">${"VIDEOTITEL"}</div>`
+          );
+          //fancy control area
+          $(".afterglow__controls").insertAdjacentHTML(
+            "beforeend",
             `<div class="afterglow__control-bar"></div>`
           );
 
