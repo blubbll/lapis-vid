@@ -4,7 +4,7 @@ let { Fullscreen } = window;
 tools
 */
 Fullscreen = {
-  open: elem => {
+  enter: elem => {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
     } else if (elem.mozRequestFullScreen) {
@@ -18,7 +18,7 @@ Fullscreen = {
       elem.msRequestFullscreen();
     }
   },
-  close: () => {
+  exit: () => {
     if (document.exitFullscreen) {
       document.exitFullscreen();
     } else if (document.mozCancelFullScreen) {

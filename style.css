@@ -1,4 +1,3 @@
-
 audio {
   display: none;
 }
@@ -23,21 +22,9 @@ input[type="range"]:hover {
 /*https://codepen.io/BainjaminLafalize/pen/GiJwn*/
 /*https://codepen.io/Varo/pen/vLdvMK*/
 
-#mep_0{
-    height: inherit;
-    position: absolute;
-    width: inherit;
-    max-height: inherit;
-}
-
-@media only screen and (orientation:portrait){
-  body {
-    height: 100vw;
-    transform: rotate(90deg);
-  }
-  
-  #mep_0{
-    width: 100vh!important;
-  }
-  
+#mep_0 {
+  height: inherit;
+  position: absolute;
+  width: inherit;
+  max-height: inherit;
 }

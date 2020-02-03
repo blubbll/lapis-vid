@@ -19,7 +19,10 @@ $("video").addEventListener(
       const that = e.target;
       // ($("#mep_0").style.width = `${that.videoWidth}px`),
       // ($("#mep_0").style.height = `${that.videoHeight}px`);
-      const ratio = that.videoHeight / that.videoWidth;
+
+      const ratio =
+        that.getAttribute("ratio") || that.videoHeight / that.videoWidth;
+      that.setAttribute("ratio", ratio);
       $("#mep_0").style.height = `${$("#mep_0").clientWidth * ratio}px`;
     };
     setTimeout(fitRatio, 0);
@@ -67,24 +70,24 @@ const syncer = setInterval(() => {
 }, 2999);
 
 //RESET EVENT
+
+$(".afterglow__top-control-bar").innerHTML = $(
+  ".afterglow__top-control-bar"
+).innerHTML;
+//ADD NEW EVENT
 $(".afterglow__button.afterglow__fullscreen-toggle").addEventListener(
   "click",
   e => {
     const that = e.target;
 
-    //force landscape on mobile
-
-    if ($("body").clientWidth < 555) {
-      const locOrientation =
-        screen.lockOrientation ||
-        screen.mozLockOrientation ||
-        screen.msLockOrientation ||
-        screen.orientation.lock;
-
-      try {
-        setTimeout(locOrientation("landscape"), 3999);
-      } catch (e) {
-        alert(e);
+    if (/*$("body").clientWidth < 555 && */ !!window.chrome);
+    {
+      if (document.fullscreen) {
+        Fullscreen.exit();
+        $("#mep_0").classList.add("afterglow__container");
+      } else {
+        $("#mep_0").classList.remove("afterglow__container");
+        Fullscreen.enter($("video"));
       }
     }
   }
