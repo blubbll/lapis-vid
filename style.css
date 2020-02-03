@@ -1,16 +1,12 @@
-video {
-  width: 80vw;
-}
 
 audio {
-  position: absolute;
-  transform: rotate(90deg) scale(0.75);
-  top: 11%;
-  left: 50%;
+  display: none;
 }
 
 lapis-player {
   display: flex;
+  height: 50%;
+  width: 100%;
 }
 
 input[type="range"] {
@@ -21,4 +17,13 @@ input[type="range"] {
 }
 input[type="range"]:hover {
   opacity: 1;
+}
+
+/*https://codepen.io/BainjaminLafalize/pen/GiJwn*/
+/*https://codepen.io/Varo/pen/vLdvMK*/
+
+#mep_0{
+    height: inherit;
+    position: absolute;
+    width: inherit;
 }
