@@ -5,6 +5,7 @@ const $$ = document.querySelectorAll.bind(document);
   const { afterglow, Fullscreen } = window;
 
   const demoMedia = {
+    title: "Testvideo",
     audio:
       "https://cdn.glitch.com/07d3d128-e4a3-48ea-9d14-fc3b0a9c1b78%2Faudio.m4a?v=1580661398525",
     video:
@@ -84,7 +85,7 @@ const $$ = document.querySelectorAll.bind(document);
           //fancy title
           $(".afterglow__controls").insertAdjacentHTML(
             "afterbegin",
-            `<div class="afterglow__title-bar">${"VIDEOTITEL"}</div>`
+            `<div class="afterglow__title-bar">${demoMedia.title}</div>`
           );
           //fancy control area
           $(".afterglow__controls").insertAdjacentHTML(
@@ -156,6 +157,8 @@ const $$ = document.querySelectorAll.bind(document);
       !!navigator.platform &&
       /iPad|iPhone|iPod/.test(navigator.platform)
     ) {
+      document.title = demoMedia.title;
+
       $("video").src = demoMedia.video_low;
     }
 
