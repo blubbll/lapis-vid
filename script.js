@@ -67,16 +67,25 @@ const syncer = setInterval(() => {
 }, 2999);
 
 //RESET EVENT
-//$(".afterglow__top-control-bar").innerHTML = $(".afterglow__top-control-bar").innerHTML;
 $(".afterglow__button.afterglow__fullscreen-toggle").addEventListener(
   "click",
   e => {
     const that = e.target;
-   
-    
-    
-      !that.isFullscreen() ? Fullscreen.open($("#mep_0")) : Fullscreen.exit();
-    
- 
+
+    //force landscape on mobile
+
+    if ($("body").clientWidth < 555) {
+      const locOrientation =
+        screen.lockOrientation ||
+        screen.mozLockOrientation ||
+        screen.msLockOrientation ||
+        screen.orientation.lock;
+
+      try {
+        setTimeout(locOrientation("landscape"), 3999);
+      } catch (e) {
+        alert(e);
+      }
+    }
   }
 );

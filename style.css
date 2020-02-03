@@ -29,3 +29,15 @@ input[type="range"]:hover {
     width: inherit;
     max-height: inherit;
 }
+
+@media only screen and (orientation:portrait){
+  body {
+    height: 100vw;
+    transform: rotate(90deg);
+  }
+  
+  #mep_0{
+    width: 100vh!important;
+  }
+  
+}
