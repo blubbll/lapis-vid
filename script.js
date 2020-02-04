@@ -2,7 +2,8 @@ const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
 {
-  const { afterglow, Fullscreen } = window;
+  const { afterglow, Browser } = window;
+  const fs = window.Fullscreen;
 
   const demoMedia = {
     title: "Testvideo",
@@ -15,11 +16,9 @@ const $$ = document.querySelectorAll.bind(document);
   };
 
   window.onload = () => {
-    var Browser = window.getBrowser();
-
     if (Browser.isFirefox || Browser.isChrome) {
       $("video").outerHTML =
-        '<video id="video" autoplay preload="metadata" class="afterglow" height="0" width="0" data-skin="light"></video>';
+        '<video autoplay preload="metadata" class="afterglow" height="0" width="0"></video>';
 
       //SET MEDIA
       ($("video").src = demoMedia.video), ($("audio").src = demoMedia.audio);
@@ -37,7 +36,8 @@ const $$ = document.querySelectorAll.bind(document);
         Object.defineProperty(VIDEO, "volume", {
           set: val => {
             VIDEO._volume = val;
-            AUDIO._volume = val;
+            //!
+            AUDIO.volume = val;
           },
           get: () => {
             return VIDEO._volume;
@@ -48,6 +48,7 @@ const $$ = document.querySelectorAll.bind(document);
         Object.defineProperty(VIDEO, "muted", {
           set: val => {
             VIDEO._muted = val;
+            //!
             AUDIO.muted = val;
           },
           get: () => {
@@ -127,30 +128,31 @@ const $$ = document.querySelectorAll.bind(document);
         ];
       }, 2999);
 
-      //RESET EVENT
+      //MOBILE DEVICE
+      if (true) {
+        //typeof window.orientation !== "undefined")
+        //RESET EVENT
+        $(".afterglow__top-control-bar").innerHTML = $(
+          ".afterglow__top-control-bar"
+        ).innerHTML;
+        //ADD NEW EVENT
+        $(".afterglow__button.afterglow__fullscreen-toggle").addEventListener(
+          "click",
+          e => {
+            const that = e.target;
 
-      $(".afterglow__top-control-bar").innerHTML = $(
-        ".afterglow__top-control-bar"
-      ).innerHTML;
-      //ADD NEW EVENT
-      $(".afterglow__button.afterglow__fullscreen-toggle").addEventListener(
-        "click",
-        e => {
-          const that = e.target;
-
-          //MOBILE DEVICE
-          if (typeof window.orientation !== "undefined");
-          {
             if (document.fullscreen) {
               Fullscreen.exit();
-              $("#mep_0").classList.add("afterglow__container");
+              //$("#mep_0").classList.add("afterglow__container");
             } else {
-              $("#mep_0").classList.remove("afterglow__container");
-              Fullscreen.enter($("video"));
+              setTimeout(() => {
+                $("#mep_0").classList.remove("afterglow__container");
+                window.Fullscreen.enter($("video"));
+              });
             }
           }
-        }
-      );
+        );
+      }
 
       //IOS
     } else if (
@@ -159,9 +161,9 @@ const $$ = document.querySelectorAll.bind(document);
     ) {
       document.title = demoMedia.title;
 
+      $("video").outerHTML = "<video preload controls playsinline></video>";
+
       $("video").src = demoMedia.video_low;
     }
-
-    $("video").src = demoMedia.video_low;
   };
 }
