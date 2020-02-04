@@ -155,10 +155,10 @@ const $$ = document.querySelectorAll.bind(document);
       }
 
       //IOS
-    } else if (
+    } /* if (
       !!navigator.platform &&
       /iPad|iPhone|iPod/.test(navigator.platform)
-    ) {
+    ) */ else {
       {
         const VIDEO = $("video");
         const AUDIO = $("audio");
