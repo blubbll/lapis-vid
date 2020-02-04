@@ -2,8 +2,7 @@ const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
 {
-  const { afterglow, Browser } = window;
-  const fs = window.Fullscreen;
+  const { afterglow, Browser, Fullscreen } = window;
 
   const demoMedia = {
     title: "Testvideo",
@@ -72,6 +71,22 @@ const $$ = document.querySelectorAll.bind(document);
             return VIDEO._pause;
           }
         });
+
+        //sync audio playNpause with video
+        AUDIO.addEventListener("play", () => {
+          VIDEO.paused && VIDEO.play();
+        }),
+          AUDIO.addEventListener("pause", () => {
+            !VIDEO.paused && VIDEO.pause();
+          });
+
+        //sync video playNpause with audio
+        VIDEO.addEventListener("play", () => {
+          AUDIO.paused && AUDIO.play();
+        }),
+          VIDEO.addEventListener("pause", () => {
+            !AUDIO.paused && AUDIO.pause();
+          });
       }
 
       $("video").addEventListener(
@@ -113,13 +128,6 @@ const $$ = document.querySelectorAll.bind(document);
         //$("video").play();
       } catch (e) {}
       {
-        //sync video playNpause with audio
-        $("audio").addEventListener("play", () => {
-          $("video").paused && $("video").play();
-        }),
-          $("audio").addEventListener("pause", () => {
-            !$("video").paused && $("video").pause();
-          });
       }
 
       const syncer = setInterval(() => {
@@ -129,8 +137,7 @@ const $$ = document.querySelectorAll.bind(document);
       }, 2999);
 
       //MOBILE DEVICE
-      if (true) {
-        //typeof window.orientation !== "undefined")
+      if (typeof window.orientation !== "undefined") {
         //RESET EVENT
         $(".afterglow__top-control-bar").innerHTML = $(
           ".afterglow__top-control-bar"
@@ -147,7 +154,7 @@ const $$ = document.querySelectorAll.bind(document);
             } else {
               setTimeout(() => {
                 $("#mep_0").classList.remove("afterglow__container");
-                window.Fullscreen.enter($("video"));
+                Fullscreen.enter($("video"));
               });
             }
           }
