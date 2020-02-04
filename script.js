@@ -13,11 +13,16 @@ const $$ = document.querySelectorAll.bind(document);
     video_low:
       "https://cdn.glitch.com/07d3d128-e4a3-48ea-9d14-fc3b0a9c1b78%2Fvideo_low.mp4?v=1580727568643"
   };
-
+  
   window.onload = () => {
     if (Browser.isFirefox || Browser.isChrome) {
+      
+      const poster = $("poster>img").currentSrc;
+      
+      console.log(poster)
+      
       $("video").outerHTML =
-        '<video autoplay preload="metadata" class="afterglow" height="0" width="0"></video>';
+        `<video autoplay preload="metadata" class="afterglow" height="0" width="0" poster="https://via.placeholder.com/350x150"></video>`;
 
       //SET MEDIA
       ($("video").src = demoMedia.video), ($("audio").src = demoMedia.audio);
@@ -28,6 +33,9 @@ const $$ = document.querySelectorAll.bind(document);
       $("video").load();
 
       {
+        
+        
+        
         const VIDEO = $("video");
         const AUDIO = $("audio");
 
@@ -71,22 +79,6 @@ const $$ = document.querySelectorAll.bind(document);
             return VIDEO._pause;
           }
         });
-
-        //sync audio playNpause with video
-        AUDIO.addEventListener("play", () => {
-          VIDEO.paused && VIDEO.play();
-        }),
-          AUDIO.addEventListener("pause", () => {
-            !VIDEO.paused && VIDEO.pause();
-          });
-
-        //sync video playNpause with audio
-        VIDEO.addEventListener("play", () => {
-          AUDIO.paused && AUDIO.play();
-        }),
-          VIDEO.addEventListener("pause", () => {
-            !AUDIO.paused && AUDIO.pause();
-          });
       }
 
       $("video").addEventListener(
@@ -138,6 +130,8 @@ const $$ = document.querySelectorAll.bind(document);
 
       //MOBILE DEVICE
       if (typeof window.orientation !== "undefined") {
+        document.title = demoMedia.title;
+
         //RESET EVENT
         $(".afterglow__top-control-bar").innerHTML = $(
           ".afterglow__top-control-bar"
@@ -166,6 +160,26 @@ const $$ = document.querySelectorAll.bind(document);
       !!navigator.platform &&
       /iPad|iPhone|iPod/.test(navigator.platform)
     ) {
+      {
+        const VIDEO = $("video");
+        const AUDIO = $("audio");
+
+        //sync audio playNpause with video
+        AUDIO.addEventListener("play", () => {
+          VIDEO.paused && VIDEO.play();
+        }),
+          AUDIO.addEventListener("pause", () => {
+            !VIDEO.paused && VIDEO.pause();
+          });
+
+        //sync video playNpause with audio
+        VIDEO.addEventListener("play", () => {
+          AUDIO.paused && AUDIO.play();
+        }),
+          VIDEO.addEventListener("pause", () => {
+            !AUDIO.paused && AUDIO.pause();
+          });
+      }
       document.title = demoMedia.title;
 
       $("video").outerHTML = "<video preload controls playsinline></video>";
