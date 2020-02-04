@@ -13,32 +13,28 @@ const $$ = document.querySelectorAll.bind(document);
     video_low:
       "https://cdn.glitch.com/07d3d128-e4a3-48ea-9d14-fc3b0a9c1b78%2Fvideo_low.mp4?v=1580727568643"
   };
-  
+
   window.onload = () => {
+    let VIDEO = $("video");
+    const AUDIO = $("audio");
+
     if (Browser.isFirefox || Browser.isChrome) {
-      
       const poster = $("poster>img").currentSrc;
-      
-      console.log(poster)
-      
-      $("video").outerHTML =
-        `<video autoplay preload="metadata" class="afterglow" height="0" width="0" poster="https://via.placeholder.com/350x150"></video>`;
+
+      $(
+        "video"
+      ).outerHTML = `<video autoplay preload="metadata" class="afterglow" height="0" width="0" poster="${poster}"></video>`;
+
+      VIDEO = $("video");
 
       //SET MEDIA
-      ($("video").src = demoMedia.video), ($("audio").src = demoMedia.audio);
+      VIDEO.src = demoMedia.video;
+      AUDIO.src = demoMedia.audio;
 
       //init afterglow
       afterglow.initVideoElements();
 
-      $("video").load();
-
       {
-        
-        
-        
-        const VIDEO = $("video");
-        const AUDIO = $("audio");
-
         //MIRROR VOLUME
         Object.defineProperty(VIDEO, "volume", {
           set: val => {
@@ -81,11 +77,13 @@ const $$ = document.querySelectorAll.bind(document);
         });
       }
 
-      $("video").addEventListener(
+      VIDEO.addEventListener(
         "loadedmetadata",
         e => {
+          console.log("loaded");
+
           try {
-            $("video").play();
+            VIDEO.play();
           } catch (e) {
             console.warn(e);
           }
@@ -116,6 +114,8 @@ const $$ = document.querySelectorAll.bind(document);
         false
       );
 
+      $("video").load();
+
       try {
         //$("video").play();
       } catch (e) {}
@@ -123,8 +123,8 @@ const $$ = document.querySelectorAll.bind(document);
       }
 
       const syncer = setInterval(() => {
-        $("audio").currentTime / $("video").currentTime > 1.1 && [
-          ($("video").currentTime = $("audio").currentTime)
+        AUDIO.currentTime / AUDIO.currentTime > 1.1 && [
+          (VIDEO.currentTime = AUDIO.currentTime)
         ];
       }, 2999);
 
@@ -144,7 +144,6 @@ const $$ = document.querySelectorAll.bind(document);
 
             if (document.fullscreen) {
               Fullscreen.exit();
-              //$("#mep_0").classList.add("afterglow__container");
             } else {
               setTimeout(() => {
                 $("#mep_0").classList.remove("afterglow__container");
@@ -164,6 +163,8 @@ const $$ = document.querySelectorAll.bind(document);
         const VIDEO = $("video");
         const AUDIO = $("audio");
 
+        document.title = demoMedia.title;
+
         //sync audio playNpause with video
         AUDIO.addEventListener("play", () => {
           VIDEO.paused && VIDEO.play();
@@ -180,7 +181,6 @@ const $$ = document.querySelectorAll.bind(document);
             !AUDIO.paused && AUDIO.pause();
           });
       }
-      document.title = demoMedia.title;
 
       $("video").outerHTML = "<video preload controls playsinline></video>";
 
