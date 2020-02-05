@@ -32,16 +32,6 @@ poster {
   display: none;
 }
 
-input[type="range"] {
-  transform: rotate(-90deg) translate(22%, -394%);
-  width: inherit;
-  opacity: 0.3;
-  align-self: center;
-}
-input[type="range"]:hover {
-  opacity: 1;
-}
-
 /*https://codepen.io/BainjaminLafalize/pen/GiJwn*/
 /*https://codepen.io/Varo/pen/vLdvMK*/
 

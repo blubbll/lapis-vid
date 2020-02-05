@@ -66,7 +66,7 @@ HTMLElement.prototype.removeListeners = () => {
     navigator.userAgent.indexOf(" OPR/") >= 0;
 
   // Firefox 1.0+
-  that.isFirefox = typeof InstallTrigger !== "undefined";
+  that.isFirefox = typeof window.InstallTrigger !== "undefined";
 
   // Safari 3.0+ "[object HTMLElementConstructor]"
   that.isSafari =
@@ -75,7 +75,7 @@ HTMLElement.prototype.removeListeners = () => {
       return p.toString() === "[object SafariRemoteNotification]";
     })(
       !window["safari"] ||
-        (typeof safari !== "undefined" && window.safari.pushNotification)
+        (typeof window.safari !== "undefined" && window.safari.pushNotification)
     );
 
   // Internet Explorer 6-11
