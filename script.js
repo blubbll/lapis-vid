@@ -63,7 +63,28 @@ const $$ = document.querySelectorAll.bind(document);
         VIDEO._play = VIDEO.play;
         Object.defineProperty(VIDEO, "play", {
           get: () => {
-            AUDIO.play();
+            AUDIO.paused && AUDIO.play();
+
+            if (AUDIO.paused) {
+              console.debug("muted");
+              $("#mep_0").insertAdjacentHTML(
+                "afterbegin",
+                "<lapis-muted></lapis-muted>"
+              );
+
+              const MUTED_WARNING = $("lapis-muted");
+              MUTED_WARNING.innerHTML =
+                "THE VIDEO IS MUTED. CLICK ME TO UNMUTE";
+              MUTED_WARNING.style.display = "flex";
+              MUTED_WARNING.addEventListener("click", () => {
+                MUTED_WARNING.remove();
+                AUDIO.muted = false;
+                VIDEO.currentTime = 0;
+                AUDIO.play();
+                !AUDIO.muted && !AUDIO.paused && console.debug("unmuted.")
+              });
+            }
+
             return VIDEO._play;
           }
         });
@@ -114,7 +135,8 @@ const $$ = document.querySelectorAll.bind(document);
         false
       );
 
-      $("video").load();
+      //load vidn
+      VIDEO.load();
 
       try {
         //$("video").play();
@@ -122,6 +144,7 @@ const $$ = document.querySelectorAll.bind(document);
       {
       }
 
+      //keep video time in sync with audio
       const syncer = setInterval(() => {
         AUDIO.currentTime / AUDIO.currentTime > 1.1 && [
           (VIDEO.currentTime = AUDIO.currentTime)
@@ -131,6 +154,25 @@ const $$ = document.querySelectorAll.bind(document);
       //MOBILE DEVICE
       if (typeof window.orientation !== "undefined") {
         document.title = demoMedia.title;
+
+        //sync audio pause on android video pause
+        document.addEventListener(
+          "fullscreenchange",
+          () => {
+            if (!document.fullscreen && VIDEO.pause && !AUDIO.paused)
+              AUDIO.pause();
+          },
+          false
+        );
+
+        //sync video war playNpause with audio
+        VIDEO.addEventListener("play", () => {
+          AUDIO.play();
+        }),
+          VIDEO.addEventListener("pause", () => {
+            !AUDIO.paused && AUDIO.pause();
+          });
+        //: @android: FIXME
 
         //RESET EVENT
         $(".afterglow__top-control-bar").innerHTML = $(

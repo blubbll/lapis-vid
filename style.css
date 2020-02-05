@@ -8,6 +8,26 @@ lapis-player {
   width: 100%;
 }
 
+lapis-muted {
+  display: none;
+  width: inherit;
+  height: 100%;
+  background: yellow;
+  position: absolute;
+  color: black;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  cursor: pointer;
+}
+lapis-muted:hover {
+  filter: contrast(0.8);
+}
+lapis-muted:focus,
+lapis-muted:active {
+  filter: contrast(0.75);
+}
+
 poster {
   display: none;
 }
