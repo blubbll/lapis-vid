@@ -92,6 +92,7 @@ const $$ = document.querySelectorAll.bind(document);
         VIDEO._pause = VIDEO.pause;
         Object.defineProperty(VIDEO, "pause", {
           get: () => {
+         
             AUDIO.pause();
             return VIDEO._pause;
           }
@@ -146,7 +147,8 @@ const $$ = document.querySelectorAll.bind(document);
 
       //keep video time in sync with audio
       const syncer = setInterval(() => {
-        AUDIO.currentTime / AUDIO.currentTime > 1.1 && [
+        console.log(AUDIO.currentTime/VIDEO.currentTime)
+        AUDIO.currentTime / VIDEO.currentTime > 1.1 && [
           (VIDEO.currentTime = AUDIO.currentTime)
         ];
       }, 2999);
