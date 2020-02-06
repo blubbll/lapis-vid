@@ -18,7 +18,7 @@ const $$ = document.querySelectorAll.bind(document);
     let VIDEO = $("video");
     const AUDIO = $("audio");
 
-    if (Browser.isFirefox || Browser.isChrome) {
+    if (Browser.isMobileChrome || Browser.isFirefox || Browser.isChrome) {
       const poster = $("poster>img").currentSrc;
 
       $(
@@ -81,7 +81,7 @@ const $$ = document.querySelectorAll.bind(document);
                 AUDIO.muted = false;
                 VIDEO.currentTime = 0;
                 AUDIO.play();
-                !AUDIO.muted && !AUDIO.paused && console.debug("unmuted.")
+                !AUDIO.muted && !AUDIO.paused && console.debug("unmuted.");
               });
             }
 
@@ -92,7 +92,6 @@ const $$ = document.querySelectorAll.bind(document);
         VIDEO._pause = VIDEO.pause;
         Object.defineProperty(VIDEO, "pause", {
           get: () => {
-         
             AUDIO.pause();
             return VIDEO._pause;
           }
@@ -154,15 +153,20 @@ const $$ = document.querySelectorAll.bind(document);
       }, 2999);
 
       //MOBILE DEVICE
-      if (typeof window.orientation !== "undefined") {
+      if (Browser.isMobileChrome) {
         document.title = demoMedia.title;
 
         //sync audio pause on android video pause
         document.addEventListener(
           "fullscreenchange",
           () => {
-            if (!document.fullscreen && VIDEO.pause && !AUDIO.paused)
-              AUDIO.pause();
+            if (!document.fullscreen) {
+              if (VIDEO.paused && !AUDIO.paused) {
+                AUDIO.pause();
+              }
+
+              $("#mep_0").classList.add("afterglow__container");
+            }
           },
           false
         );
