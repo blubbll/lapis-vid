@@ -67,7 +67,7 @@ const $$ = document.querySelectorAll.bind(document);
 
             if (AUDIO.paused) {
               console.debug("muted");
-              $("#mep_0").insertAdjacentHTML(
+              $(".afterglow__video").insertAdjacentHTML(
                 "afterbegin",
                 "<lapis-muted></lapis-muted>"
               );
@@ -127,7 +127,7 @@ const $$ = document.querySelectorAll.bind(document);
               $("lapis-player").getAttribute("ratio") ||
               that.videoHeight / that.videoWidth;
             $("lapis-player").setAttribute("ratio", ratio);
-            $("#mep_0").style.height = `${$("#mep_0").clientWidth * ratio}px`;
+            $(".afterglow__video").style.height = `${$(".afterglow__video").clientWidth * ratio}px`;
           };
           setTimeout(fitRatio, 0);
           window.addEventListener("resize", fitRatio);
@@ -165,7 +165,7 @@ const $$ = document.querySelectorAll.bind(document);
                 AUDIO.pause();
               }
 
-              $("#mep_0").classList.add("afterglow__container");
+              $(".afterglow__video").classList.add("afterglow__container");
             }
           },
           false
@@ -194,7 +194,7 @@ const $$ = document.querySelectorAll.bind(document);
               Fullscreen.exit();
             } else {
               setTimeout(() => {
-                $("#mep_0").classList.remove("afterglow__container");
+                $(".afterglow__video").classList.remove("afterglow__container");
                 Fullscreen.enter($("video"));
               });
             }

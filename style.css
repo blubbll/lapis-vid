@@ -39,7 +39,7 @@ poster {
 /*https://codepen.io/Varo/pen/vLdvMK*/
 
 video,
-#mep_0 {
+.afterglow__video {
   height: inherit;
   position: absolute;
   width: inherit;
